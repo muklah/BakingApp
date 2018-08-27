@@ -50,6 +50,11 @@ public class RecipeStepDetailFragment extends Fragment {
     ArrayList<Recipe> recipe;
     String recipeName;
 
+    private long exo_current_position = 0;
+    private boolean playerStopped = false;
+    private long playerStopPosition;
+    private static final String EXO_CURRENT_POSITION = "current_position";
+
     public RecipeStepDetailFragment() {
         // Required empty public constructor
     }
@@ -93,7 +98,7 @@ public class RecipeStepDetailFragment extends Fragment {
             steps = savedInstanceState.getParcelableArrayList("Steps");
             selectedIndex = savedInstanceState.getInt("Step");
             recipeName = savedInstanceState.getString("Title");
-
+            exo_current_position = savedInstanceState.getLong(EXO_CURRENT_POSITION);
         }
         else {
             steps = getArguments().getParcelableArrayList("Steps");
@@ -202,6 +207,12 @@ public class RecipeStepDetailFragment extends Fragment {
             String userAgent = Util.getUserAgent(getContext(), "Baking App");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
+            if (exo_current_position != 0 && !playerStopped){
+                player.seekTo(exo_current_position);
+            }
+            else {
+                player.seekTo(playerStopPosition);
+            }
             player.setPlayWhenReady(true);
         }
     }
@@ -211,6 +222,7 @@ public class RecipeStepDetailFragment extends Fragment {
         super.onSaveInstanceState(currentState);
         currentState.putParcelableArrayList("Steps",steps);
         currentState.putInt("Step",selectedIndex);
+        currentState.putLong(EXO_CURRENT_POSITION,player.getCurrentPosition());
     }
 
     public boolean isInLandscapeMode( Context context ) {
@@ -241,6 +253,8 @@ public class RecipeStepDetailFragment extends Fragment {
         super.onStop();
         if (player!=null) {
             player.stop();
+            playerStopPosition = player.getCurrentPosition();
+            playerStopped = true;
             player.release();
         }
     }

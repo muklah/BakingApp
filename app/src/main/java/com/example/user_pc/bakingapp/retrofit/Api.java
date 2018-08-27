@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
-    public static final String BASE_URL = "Add api url here";
+    public static final String BASE_URL = "Add api link here";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

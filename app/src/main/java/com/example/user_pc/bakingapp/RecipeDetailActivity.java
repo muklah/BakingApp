@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.user_pc.bakingapp.pojo.Recipe;
 import com.example.user_pc.bakingapp.pojo.Step;
@@ -37,6 +36,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment).addToBackStack("RECIPES_DETAILS")
                     .commit();
+
+            if (findViewById(R.id.recipe_detail).getTag()!=null && findViewById(R.id.recipe_detail).getTag().equals("tablet-land")) {
+
+                final RecipeStepDetailFragment fragment2 = new RecipeStepDetailFragment();
+                fragment2.setArguments(recipeBundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container2, fragment2).addToBackStack("STEPS_DETAILS")
+                        .commit();
+
+            }
+
         }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -62,7 +72,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
                 }
                 else {
 
-                    //go back to "Recipe" screen
                     finish();
 
                 }
@@ -70,7 +79,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
             }
         });
     }
-
 
     @Override
     public void onClick(List<Step> stepsOut, int selectedItemIndex, String recipeName) {
@@ -85,9 +93,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         stepDetailsBundle.putString("Title",recipeName);
         fragment.setArguments(stepDetailsBundle);
 
+        if (findViewById(R.id.recipe_detail).getTag()!=null && findViewById(R.id.recipe_detail).getTag().equals("tablet-land")) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment).addToBackStack("STACK_RECIPE_STEP_DETAIL")
+                    .replace(R.id.fragment_container2, fragment).addToBackStack("STEPS_DETAILS")
                     .commit();
+
+        }
+        else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment).addToBackStack("STEPS_DETAILS")
+                    .commit();
+        }
 
     }
 
