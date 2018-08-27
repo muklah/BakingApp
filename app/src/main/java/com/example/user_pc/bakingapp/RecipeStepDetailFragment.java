@@ -49,6 +49,7 @@ public class RecipeStepDetailFragment extends Fragment {
     private Handler handler;
     ArrayList<Recipe> recipe;
     String recipeName;
+    boolean getPlayerWhenReady ;
 
     private long exo_current_position = 0;
     private boolean playerStopped = false;
@@ -99,6 +100,7 @@ public class RecipeStepDetailFragment extends Fragment {
             selectedIndex = savedInstanceState.getInt("Step");
             recipeName = savedInstanceState.getString("Title");
             exo_current_position = savedInstanceState.getLong(EXO_CURRENT_POSITION);
+            getPlayerWhenReady = savedInstanceState.getBoolean("state");
         }
         else {
             steps = getArguments().getParcelableArrayList("Steps");
@@ -213,7 +215,7 @@ public class RecipeStepDetailFragment extends Fragment {
             else {
                 player.seekTo(playerStopPosition);
             }
-            player.setPlayWhenReady(true);
+            player.setPlayWhenReady(getPlayerWhenReady);
         }
     }
 
@@ -223,6 +225,8 @@ public class RecipeStepDetailFragment extends Fragment {
         currentState.putParcelableArrayList("Steps",steps);
         currentState.putInt("Step",selectedIndex);
         currentState.putLong(EXO_CURRENT_POSITION,player.getCurrentPosition());
+        getPlayerWhenReady = player.getPlayWhenReady();
+        currentState.putBoolean("state", getPlayerWhenReady);
     }
 
     public boolean isInLandscapeMode( Context context ) {
@@ -256,6 +260,8 @@ public class RecipeStepDetailFragment extends Fragment {
             playerStopPosition = player.getCurrentPosition();
             playerStopped = true;
             player.release();
+            getPlayerWhenReady = player.getPlayWhenReady();
+            player.setPlayWhenReady(false);
         }
     }
 
@@ -265,6 +271,13 @@ public class RecipeStepDetailFragment extends Fragment {
         if (player!=null) {
             player.stop();
             player.release();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (player!=null) {
         }
     }
 
