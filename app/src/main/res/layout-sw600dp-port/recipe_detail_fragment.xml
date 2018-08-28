@@ -25,11 +25,11 @@
         android:fillViewport="false">
 
         <TextView
+            android:id="@+id/recipe_detail_text"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:textSize="16sp"
             android:textColor="#E0E0E0"
-            android:id="@+id/recipe_detail_text"
             android:padding="15dp" />
     </ScrollView>
 
